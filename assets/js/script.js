@@ -18,19 +18,43 @@ searchForm.addEventListener("submit", function (event) {
             var searchWeatherURL = "http://api.openweathermap.org/data/2.5/onecall?units=imperial&lat=" + lat + "&lon=" + lon + "&appid=" + openWeatherKey;
             fetch(searchWeatherURL)
                 .then(response => response.json())
-                .then(function (weatherData){
+                .then(function (weatherData) {
                     console.log(weatherData)
                     var temp = weatherData.current.temp
                     var wind = weatherData.current.wind_speed
                     var humidity = weatherData.current.humidity
                     var uvi = weatherData.current.uvi
-                    
+
                     document.querySelector("#cityName").textContent = location
                     document.querySelector("#temp").textContent = "temp:" + temp
                     document.querySelector("#wind").textContent = "wind:" + wind
                     document.querySelector("#humidity").textContent = "humidity:" + humidity
                     document.querySelector("#uvi").textContent = "UV index:" + uvi
-                })
+                 
+
+                    for (let i = 1; i < 6; i++) {
+                        var dt = weatherData.daily[i].dt
+                        var tempF = weatherData.daily[i].temp.day
+                        var windF = weatherData.daily[i].wind_speed
+                        var humidityF = weatherData.daily[i].humidity
+                        var wf = document.createElement("div")
+                        var tempP = document.createElement("p")
+                        var windP = document.createElement("p")
+                        var humidityP = document.createElement("p")
+                        var dateH3 = document.createElement("h3")
+                        var fiveDay = document.querySelector("#fiveDay")
+                        var date = new Date(parseInt(dt)*1000).toLocaleDateString("en-US")
+                        
+                        dateH3.innerHTML = `${date}`
+                        tempP.innerHTML = `Temp: ${tempF}`
+                        windP.innerHTML = `Wind: ${windF}`
+                        humidityP.innerHTML = `Temp: ${humidityF}`
+                        wf.append(dateH3, tempP, windP, humidityP)
+                        fiveDay.append(wf)
+                        // document.querySelector("#tempF").textContent = "temp:" + tempF
+                        // document.querySelector("#windF").textContent = "wind:" + windF
+                        // document.querySelector("#humidityF").textContent = "humidity:" + humidityF
+                    }})
 
 
         })
